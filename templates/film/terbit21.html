@@ -1,0 +1,95 @@
+<div class="container-fluid">
+    <div class="jumbotron">
+        <h1 class="page-header"> Terbit21.cool </h1>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <div class="form-group">
+                <label for=""> URL My Drive (Only Work On Local) </label>
+                <input type="text" id="myDrive" class="form-control" placeholder="https://gfqqqstbtpetpzhw8q2mjfr3kkewste8x9kprthc7a54zuqsnm.xyz/f/">
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" onclick="driveBypass()"> Bypass </button>
+            </div>
+            <div class="card d-none">
+                <div class="card-body" id="driveAlert">
+
+                </div>
+            </div>
+            <div class="form-group">
+                <label for=""> Search  </label>
+                <div class="row">
+                    <div class="col-12 col-md-6">
+                        <input type="text" id="search" class="form-control">
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <select class="form-control" id="searchSelect">
+                            <option> Search First </option>
+                        </select>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-group mt-3">
+                            <button type="button" class="btn btn-primary" onclick="downloadFilm()"> Download </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card d-none">
+                <div class="card-body" id="searchOutput">
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $("#search").on("input",function(){
+        if ($(this).val() != ""){
+            $.ajax({
+                url: '/api/terbit21/search/' + $(this).val(),
+                type: 'GET',
+                success: function(s){
+                    var film = s['results'];
+                    $("#searchSelect").html("");
+                    for (var i = 0; i < film.length; i++){
+                        $("#searchSelect").append('<option value="' + film[i]['slug'] + '">' + film[i]["title"] + "</option>");
+                    }
+                }
+            });
+        }
+        else {
+            $("#searchSelect").html("<option> Search First </option>");
+        }
+    });
+    function driveBypass(){
+        $("#driveAlert").parent().addClass("d-none");
+        $.ajax({
+            url: "/api/terbit21/" + btoa($("#myDrive").val()),
+            type: "GET",
+            success: function(s){
+                $("#driveAlert").html("");
+                if (s.length > 0){
+                    for (var i = 0; i < s.length; i++){
+                        $("#driveAlert").append("<a class='btn btn-success ml-2' href='" + s[i]['file'] + "'>" + s[i]['label'] + "</a>");   
+                    }
+                }
+                else {
+                    $("#driveAlert").html("Link Error !!!");
+                }
+                $("#driveAlert").parent().removeClass("d-none");
+            }
+        });
+    }
+    function downloadFilm(){
+        $("#searchOutput").parent().addClass("d-none");
+        $.ajax({
+            url: "/api/terbit21/link/" + $("#searchSelect").val(),
+            type: "GET",
+            success: function(s){
+                $("#searchOutput").html(s);
+                $("#searchOutput").parent().removeClass("d-none");
+            }
+        });
+    }
+</script>

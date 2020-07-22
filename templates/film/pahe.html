@@ -1,0 +1,41 @@
+<div class="container-fluid">
+    <div class="jumbotron">
+        <h1 class="page-header"> Pahe.in </h1>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <div class="form-group">
+                <label for=""> URL </label>
+                <input type="text" id="myDrive" class="form-control" placeholder="https://intercelestial.com/?id=MFhQT3JMdzlFWHcxSnVjdTFkeHIvS3JmSGpTcFN4dWo1NnArclV5bE1HWkw0eDRmOU1uNDVGdE9GNUtxU1RiWWsvZ0lVTTZsLzFWcVNDSHVmM09Rc1E9PQ==">
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" onclick="driveBypass()"> Bypass </button>
+            </div>
+            <div class="alert d-none" id="driveAlert">
+        </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function driveBypass(){
+        $("#driveAlert").addClass("d-none");
+        $("#driveAlert").removeClass("alert-success");
+        $("#driveAlert").removeClass("alert-danger");
+        $.ajax({
+            url: "/api/pahe/" + btoa($("#myDrive").val()),
+            type: "GET",
+            success: function(s){
+                if (s.length > 0){
+                    $("#driveAlert").addClass("alert-success");
+                    $("#driveAlert").html("<a href='" + s +"'> Download Here </a>");
+                }
+                else {
+                    $("#driveAlert").addClass("alert-danger");
+                    $("#driveAlert").html("Link Error !!!");
+                }
+                $("#driveAlert").removeClass("d-none");
+            }
+        });
+    }
+</script>
