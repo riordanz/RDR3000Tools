@@ -56,6 +56,7 @@ def do(typ, web, url):
 
 if len(argv) < 3:
     help()
+    exit()
 
 web_by = ["pahe", "terbit21", "kuyhaa", "gigapb", "oploverz", "nimegami"]
 web_ba = ["mediafire"]
