@@ -104,7 +104,6 @@ def batch(web, action = ""):
         if not action:
             return render_template("template.html", data=toHtml("batch/mediafire"))
         elif action == "download":
-            return session["_id"]
-            # return send_file("mediafire.zip", as_attachment = True)
+            return send_file("mediafire.zip", as_attachment = True)
 
 app.run(host = '0.0.0.0', debug = True)
